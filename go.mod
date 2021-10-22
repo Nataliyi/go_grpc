@@ -1,4 +1,4 @@
-module go_grpc
+module github.com/Nataliyi/go_grpc
 
 go 1.13
 
@@ -10,5 +10,5 @@ require (
 	google.golang.org/genproto v0.0.0-20211020151524-b7c3a969101a // indirect
 	google.golang.org/grpc v1.41.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0 // indirect
-	google.golang.org/grpc/examples v0.0.0-20211021223902-4f21cde702d9 // indirect
+	google.golang.org/grpc/examples v0.0.0-20211021223902-4f21cde702d9
 )
