@@ -20,7 +20,8 @@ var (
 	tls      = flag.Bool("tls", false, "Connection uses TLS if true, else plain TCP")
 	certFile = flag.String("cert_file", "", "The TLS cert file")
 	keyFile  = flag.String("key_file", "", "The TLS key file")
-	port     = flag.Int("port", os.Getenv("PORT"), "The server port")
+	port     = flag.String("port", os.Getenv("PORT"), "The server port")
+	// port = flag.String("port", "10000", "The server port")
 )
 
 type ClusrerizationApiServer struct {
@@ -31,7 +32,7 @@ func (s *ClusrerizationApiServer) UnaryClasterization(ctx context.Context, req *
 	return &pb.GRPCResponse{
 		Pid:     req.GetPid(),
 		Sid:     req.GetSid(),
-		Cluster: rand.Intn(100),
+		Cluster: rand.Int31(),
 	}, nil
 }
 
@@ -47,7 +48,7 @@ func (s *ClusrerizationApiServer) StreamClasterization(stream pb.ClusterizationA
 		res := &pb.GRPCResponse{
 			Pid:     req.GetPid(),
 			Sid:     req.GetSid(),
-			Cluster: rand.Intn(100),
+			Cluster: rand.Int31(),
 		}
 		err = stream.Send(res)
 	}

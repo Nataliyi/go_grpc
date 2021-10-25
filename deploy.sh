@@ -24,22 +24,25 @@
 # --role "roles/iap.httpsResourceAccessor"
 
 # protoc
-protoc --go-grpc_out=. --go-grpc_opt=paths=source_relative ./protos/grpc.proto
-
+protoc --go_out=. --go_opt=paths=source_relative \
+    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+    protos/grpc.proto
 # # build image
-gcloud builds submit --tag gcr.io/clusterization-services/cl-server:v0.0.1
+gcloud builds submit --tag gcr.io/clusterization-services/cl-server-go:v0.0.1
 
 # # deploy container
-gcloud beta run deploy cl-server \
+gcloud beta run deploy cl-server-go \
     --image gcr.io/clusterization-services/cl-server:v0.0.1 \
     --platform=managed \
     --region=us-central1 \
     --allow-unauthenticated \
     --project=clusterization-services \
+    --min-instances=0 \
+    --max-instances=1 \
+    --concurrency=300 \
     --use-http2 \
     --cpu=2 \
     --memory=2G \
-    --min-instances=1 \
     --set-env-vars=REDISHOST=10.185.158.92,REDISPORT=6379
     # --vpc-connector=cluster-cache-connector 
 
@@ -53,11 +56,11 @@ grpcurl \
     -insecure \
     -proto grpc.proto \
     -d '{"pid":44, "sid": 22}' \
-    cl-server-now57mm4pa-uc.a.run.app:443 \
+    cl-server--go-now57mm4pa-uc.a.run.app:443 \
     ClusterizationAPI.StreamClasterization
 
 grpcurl \
     -proto grpc.proto \
     -d '{"pid":44, "sid": 22}' \
-    cl-server-now57mm4pa-uc.a.run.app:443 \
+    cl-server-go-now57mm4pa-uc.a.run.app:443 \
     ClusterizationAPI.UnaryClasterization
